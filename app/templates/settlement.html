@@ -1,0 +1,33 @@
+<div class="folios"><article class="panel">
+<h3>月度结账与撤销落账</h3>
+<p class="hint">草卷不入账；冲减只抵原凭证实签页并保留来件日期。已结月份的原报数字冻结可查，晚到撤销落在当前处理月。</p>
+<form id="close-month">
+  <label for="period">结账月份</label>
+  <input id="period" name="period" type="month" required>
+  <button>结账冻结</button>
+</form>
+<output id="close-result" role="status"></output>
+</article>
+<aside class="panel">
+<h3>已结月份</h3>
+{% if settlement and settlement.closes %}
+<table class="ledger-table">
+<thead><tr><th>月份</th><th>毛实签</th><th>当月冲减</th><th>晚到冲减</th><th>净报页数</th></tr></thead>
+<tbody>
+{% for item in settlement.closes %}
+<tr><td>{{ item.period }}</td><td>{{ item.gross_signed }}</td><td>{{ item.same_period_offsets }}</td>
+<td>{{ item.late_postings }}</td><td><strong>{{ item.net_signed }}</strong></td></tr>
+{% endfor %}
+</tbody></table>
+{% else %}<p>尚无已结月份。</p>{% endif %}
+<h3>跨期冲减流水</h3>
+{% if settlement and settlement.postings %}
+<table class="ledger-table">
+<thead><tr><th>撤销件</th><th>原订单</th><th>来件日期</th><th>落账月</th><th>页数</th></tr></thead>
+<tbody>
+{% for p in settlement.postings %}
+<tr><td>{{ p.entry }}</td><td>{{ p.target }}</td><td>{{ p.source_date }}</td><td>{{ p.period }}</td><td>{{ p.pages }}</td></tr>
+{% endfor %}
+</tbody></table>
+{% else %}<p>暂无跨期冲减。</p>{% endif %}
+</aside></div>

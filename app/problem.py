@@ -7,6 +7,9 @@ MESSAGES = {
     'NO_LICENSE':'当天无有效授权', 'OUTSIDE_ARTICLE':'申请超出文章页界', 'QUOTA':'额度不足',
     'UNKNOWN_TARGET':'撤销目标未裁决', 'REPEATED_CANCEL':'复本订单已撤销', 'WRONG_ORG':'撤销机构与原件不符',
     'RUN_UNKNOWN':'未找到许可批次', 'DRAFT_ONLY':'请先签发批次凭证', 'BOUNDARY':'跨年度复本不能撤销',
+    'PERIOD_FORMAT':'月份格式应为 YYYY-MM', 'PERIOD_CLOSED':'该月份已结账，数字已冻结',
+    'PERIOD_ORDER':'须按月份顺序结账', 'PERIOD_BUSY':'该月份正在结账，请重取结果',
+    'FUTURE_PERIOD':'不能对未来月份结账', 'CLOSE_UNKNOWN':'该月份尚未结账',
 }
 
 

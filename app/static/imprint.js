@@ -48,3 +48,15 @@ bind(document.querySelector('#stamp'), async () => {
   note.textContent = record.reused ? '已取回原凭证' : '复制许可凭证已落印';
 });
 document.querySelector('#print-slip')?.addEventListener('click', () => window.print());
+
+bind(document.querySelector('#close-month'), async form => {
+  const period = new FormData(form).get('period');
+  const result = await send('/api/closes', {period});
+  const box = document.querySelector('#close-result');
+  if (box) {
+    box.value = `${result.period} 净报 ${result.net_signed} 页`
+      + `（毛 ${result.gross_signed} − 当月 ${result.same_period_offsets} − 晚到 ${result.late_postings}）`;
+  }
+  note.textContent = result.closed_at ? '月份已结账，原报数字已冻结' : '结账完成';
+  setTimeout(() => location.reload(), 400);
+});

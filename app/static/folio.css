@@ -36,5 +36,10 @@ details {padding:7px 0;border-bottom:1px solid var(--line)}
 summary {cursor:pointer}
 footer {display:flex;justify-content:space-between;gap:12px;padding:13px clamp(16px,5vw,72px);border-top:1px solid var(--line);color:var(--muted);font-size:13px}
 textarea {width:100%;resize:vertical}
+.ledger-table {margin:6px 0 18px;white-space:normal}
+.ledger-table th,.ledger-table td {text-align:left}
+.hint {color:var(--muted);font-size:13px;margin:0 0 14px}
+input[type=month] {font:inherit;color:var(--ink);background:var(--page);border:var(--rule) solid var(--line);padding:5px 9px}
+#close-result {display:block;width:100%;margin-top:10px;color:var(--stamp);font:650 14px var(--font-num)}
 @media(max-width:850px) {.folio{--rail:136px;--gap:17px}.folios{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:550px) {.folio{display:block}nav{position:static;border:0;padding:0 0 15px;display:flex;gap:10px;flex-wrap:wrap}nav h2{display:none}nav a{font-size:13px}.masthead{align-items:start;flex-direction:column}.kpis{gap:12px}}

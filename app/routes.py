@@ -1,6 +1,9 @@
-from flask import Blueprint, current_app, jsonify
+from flask import Blueprint, current_app, jsonify, request
 
 from app.certificate.slip import certificate, stamp
+from app.problem import DeskError
+from app.settlement import check_period, freeze, list_closes, list_postings
+from app.settlement.close import existing_close
 from app.source import read_request
 from app.vault.record import deposit, index, volume
 from app.workflow import steps
@@ -63,3 +66,29 @@ def download(run):
     result = jsonify(certificate(current_app.vault,run))
     result.headers['Content-Disposition'] = f'attachment; filename="license-{run}.json"'
     return result
+
+
+@rights.post('/api/closes')
+def close_month():
+    payload = request.get_json(silent=True) or {}
+    period = check_period(payload.get('period', ''))
+    as_of = payload.get('as_of')
+    with current_app.vault.session() as conn:
+        report, reused = freeze(conn, period, as_of)
+    return report, 200 if reused else 201
+
+
+@rights.get('/api/closes')
+def closes_index():
+    with current_app.vault.session() as conn:
+        return {'closes': list_closes(conn), 'postings': list_postings(conn)}
+
+
+@rights.get('/api/closes/<period>')
+def close_detail(period):
+    check_period(period)
+    with current_app.vault.session() as conn:
+        report = existing_close(conn, period)
+        if report is None:
+            raise DeskError('CLOSE_UNKNOWN', 404)
+        return {'close': report, 'postings': list_postings(conn, period)}

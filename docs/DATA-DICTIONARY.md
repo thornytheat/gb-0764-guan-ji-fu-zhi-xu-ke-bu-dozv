@@ -8,3 +8,5 @@
 - 以收件日期与原行号顺序重放整份卷宗。同机构、同年度且曾实际许可的订单允许撤销一次，只返还实际许可页。原裁决保留。当年额度池限额等于有效占用加可用额度。毛许可减撤销返还等于有效占用。
 - 已采信的复本订单满足申请页等于许可、拒绝与待证三项相加。隔离及重复流水排除在页数核对之外。
 - 每次归卷独立复算。客户提交撤销或新增订单时需提交完整卷宗。档案键由输入摘要、持权方目录摘要和规则参数生成。签发印摘要为凭证内容的 SHA-256。
+- 月度结账以 `closes(period 主键, body, closed_at)` 冻结报送快照：`gross_signed` 为按来件月归集的实签毛页，`same_period_offsets` 是同月撤销冲减，`late_postings` 是来源月已结账后才到达的撤销冲减，`net_signed = gross_signed − same_period_offsets − late_postings`。
+- 跨期冲减流水存 `postings(entry 主键, target, period, source_date, posted_at, pages, run_id, line)`：`source_date` 保留撤销来件日期，`period` 是实际落账月。entry 主键保证同一撤销重试或并发时只抵一次、月份不漂移。失败撤销（UNKNOWN_TARGET/REPEATED_CANCEL/WRONG_ORG/BOUNDARY）不入表。
